@@ -33,6 +33,7 @@ namespace NoteTaking
         private void buttonCreate_Click(object sender, EventArgs e)
         {
             clearText();
+            dataGridView1.CurrentCell = null;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -40,37 +41,54 @@ namespace NoteTaking
             if (string.IsNullOrEmpty(textTitle.Text) && string.IsNullOrEmpty(textMessage.Text))
             {
                 MessageBox.Show("Please insert your text before you can save your note.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            } else
+            } 
+            else
             {
                 table.Rows.Add(textTitle.Text, textMessage.Text);
                 clearText();
             }
+            dataGridView1.CurrentCell = null;
         }
 
         private void buttonRead_Click(object sender, EventArgs e)
         {
-            int index = dataGridView1.CurrentCell.RowIndex;
-
-            if (index > -1)
+            if (dataGridView1.CurrentCell == null)
             {
-                textTitle.Text = table.Rows[index].ItemArray[0].ToString();
-                textMessage.Text = table.Rows[index].ItemArray[1].ToString();
+                MessageBox.Show("Please select a note to read!!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                int index; index = dataGridView1.CurrentCell.RowIndex;
+
+                if (index > -1)
+                {
+                    textTitle.Text = table.Rows[index].ItemArray[0].ToString();
+                    textMessage.Text = table.Rows[index].ItemArray[1].ToString();
+                }
             }
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            int index = dataGridView1.CurrentCell.RowIndex;
-            string title = table.Rows[index].ItemArray[0].ToString();
-            string message = table.Rows[index].ItemArray[1].ToString();
-
-            if (MessageBox.Show("Do you really want to delete this message?", "Deleting message...", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+            if (dataGridView1.CurrentCell == null)
             {
-                table.Rows[index].Delete();
+                MessageBox.Show("Please select a note to delete!!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                int index = dataGridView1.CurrentCell.RowIndex;
 
-                if (textTitle.Text == title && textMessage.Text == message)
+                string title = table.Rows[index].ItemArray[0].ToString();
+                string message = table.Rows[index].ItemArray[1].ToString();
+
+                if (MessageBox.Show("Do you really want to delete this message?", "Deleting message...", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    clearText();
+                    table.Rows[index].Delete();
+
+                    if (textTitle.Text == title && textMessage.Text == message)
+                    {
+                        clearText();
+                    }
                 }
             }
         }
