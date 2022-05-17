@@ -27,7 +27,7 @@ namespace NoteTaking
             dataGridView1.DataSource = table;
 
             dataGridView1.Columns["Messages"].Visible = false;
-            dataGridView1.Columns["Title"].Width = 194;
+            dataGridView1.Columns["Title"].Width = dataGridView1.Width - 3;
         }
 
         private void buttonCreate_Click(object sender, EventArgs e)
